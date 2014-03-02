@@ -28,7 +28,10 @@ __author__ = 'Sindre Smistad'
 class Client():
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
-            setattr(self, k, v)
+            if isinstance(v, str):
+                setattr(self, k, unicode(v, "utf8"))
+            else:
+                setattr(self, k, v)
 
     @staticmethod
     def client_json(client):
