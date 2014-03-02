@@ -21,37 +21,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
-from kaosu.models.client import Client
 
 __author__ = 'Sindre Smistad'
 
-
-class Channel():
-    def __init__(self, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-
-        self.clients = []
+from flask import *
+from kaosu import ts3server
+from kaosu.models.channel import Channel
 
 
-    @staticmethod
-    def channel_json(channel):
-        return {
-            "channel_order": channel.channel_order,
-            "cid": channel.cid,
-            "pid": channel.pid,
-            "channel_name": channel.channel_name,
-            "clients": Client.clients_json(channel.clients),
-            "channel_description": channel.channel_description
-        }
+mod = Blueprint('client', __name__)
 
-    @staticmethod
-    def channels_json(channels):
-        return [Channel.channel_json(channel) for channel in channels]
 
-    def __str__(self):
-        return str(Channel.channel_json(self))
+@mod.route("/channel/<int:cid>", methods=["GET"])
+def get_client(cid):
 
-    def __repr__(self):
-        return self.__str__()
-
+    return jsonify(Client.client_json(ts3server.get_client(ts3server, clid)))

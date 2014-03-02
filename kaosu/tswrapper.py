@@ -26,9 +26,13 @@ __author__ = 'Sindre Smistad'
 
 
 import ts3
+import re
 from kaosu.models.client import Client
 from kaosu.models.server import Server
 from kaosu.models.channel import Channel
+
+
+img_regex = "\[IMG\](.*?)\[\/IMG\]"
 
 
 class TSWrapper(ts3.TS3Server):
@@ -37,9 +41,9 @@ class TSWrapper(ts3.TS3Server):
 
     @staticmethod
     def get_client(ts3server, clid):
-        respone = ts3server.send_command("clientinfo", keys={'clid': clid}).data[0]
-
-        return Client(**respone)
+        response = ts3server.send_command("clientinfo", keys={'clid': clid}).data[0]
+        response["clid"] = clid
+        return Client(**response)
 
     @staticmethod
     def get_clientsinfo(ts3server):
@@ -47,6 +51,11 @@ class TSWrapper(ts3.TS3Server):
         clients_raw = ts3server.clientlist()
 
         for client in clients_raw:
+
+            # Exclude serveradmin from the list.
+            if clients_raw[client]["client_database_id"] == "1":
+                continue
+
             clients.append(TSWrapper.get_client(ts3server, clients_raw[client]["clid"]))
 
         return clients
@@ -60,13 +69,41 @@ class TSWrapper(ts3.TS3Server):
 
     @staticmethod
     def get_serverinfo(ts3server):
-        respone = ts3server.send_command("serverinfo").data[0]
+        response = ts3server.send_command("serverinfo").data[0]
 
-        return Server(**respone)
+        return Server(**response)
+
+    @staticmethod
+    def get_channel(ts3server, cid):
+        response = ts3server.send_command("channelinfo", keys={'cid': cid}).data[0]
+        channel = Channel(**response)
+        channel.cid = cid
+
+        return channel
 
     @staticmethod
     def get_channelsinfo(ts3server):
+        channels = []
         channels_raw = ts3server.send_command("channellist").data
-        channels = [Channel(**channel) for channel in channels_raw]
+
+        for channel in channels_raw:
+            tmp = TSWrapper.get_channel(ts3server, channel["cid"])
+            if tmp.channel_description == None:
+                tmp.channel_description = ""
+
+            # If description, turn img tag to real html.
+            else:
+                match = re.search(img_regex, tmp.channel_description)
+                if match:
+                    tmp.channel_description = tmp.channel_description.replace(
+                        match.group(0),
+                        "<img src='%s' />" % match.group(1)
+                    )
+
+            channels.append(tmp)
 
         return channels
+
+    @staticmethod
+    def kick_user(ts3server, clid):
+       ts3server.send_command('clientkick', keys={'clid': clid, 'reasonid': 5})

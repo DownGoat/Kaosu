@@ -52,7 +52,8 @@ class Client():
             "cid": client.cid,
             "client_platform": client.client_platform,
             "client_is_channel_commander": client.client_is_channel_commander,
-            "client_talk_power": client.client_talk_power
+            "client_talk_power": client.client_talk_power,
+            "clid": client.clid
         }
 
 

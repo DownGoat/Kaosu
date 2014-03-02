@@ -43,10 +43,11 @@ ts3server.login(ts3admin_user, ts3admin_pass)
 ts3server.use(1)
 
 
-from kaosu.views import client, index, server
+from kaosu.views import client, index, server, kick
 
 
 #Register blueprints
 app.register_blueprint(client.mod)
 app.register_blueprint(index.mod)
 app.register_blueprint(server.mod)
+app.register_blueprint(kick.mod)

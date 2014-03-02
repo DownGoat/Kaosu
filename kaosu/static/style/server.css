@@ -32,7 +32,7 @@ body {
 	float: left;
 }
 
-#info_display {
+#server_info {
 	width: 50%;
 	float: right;
 }
@@ -43,4 +43,8 @@ body {
 
 .client_li {
 	list-style-image:url('/static/images/client_idle.png');
+}
+
+.bold {
+    font-weight: bold;
 }
