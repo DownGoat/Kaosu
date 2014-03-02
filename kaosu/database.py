@@ -24,28 +24,31 @@ THE SOFTWARE.
 
 __author__ = 'Sindre Smistad'
 
-import logging
-from datetime import date
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+from config import db_connector
 
 
-version = "0.01"
+engine = create_engine(db_connector, convert_unicode=True)
+
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False,
+                                         bind=engine))
+
+Model = declarative_base()
+Model.query = db_session.query_property()
 
 
-ts3admin_user = "serveradmin"
-ts3admin_pass = "password"
+def drop_all():
+    Model.metadata.drop_all(bind=engine)
 
-db_user = "root"
-db_pass = "password"
-db_host = "127.0.0.1"
-db_name = "kaoru"
-db_type = "mysql"
-db_port = "3306"
+def init_db():
+    # import all modules here that might define models so that
+    # they will be registered properly on the metadata.  Otherwise
+    # you will have to import them first before calling init_db()
+    from kaosu.models.vote_kick import VoteKick
 
-db_connector = "{0}://{1}:{2}@{3}:{4}/{5}".format(
-    db_type,
-    db_user,
-    db_pass,
-    db_host,
-    db_port,
-    db_name
-)
+    Model.metadata.create_all(bind=engine)

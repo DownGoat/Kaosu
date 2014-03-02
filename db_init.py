@@ -24,28 +24,9 @@ THE SOFTWARE.
 
 __author__ = 'Sindre Smistad'
 
-import logging
-from datetime import date
+from kaosu import database
 
 
-version = "0.01"
+database.drop_all()
+database.init_db()
 
-
-ts3admin_user = "serveradmin"
-ts3admin_pass = "password"
-
-db_user = "root"
-db_pass = "password"
-db_host = "127.0.0.1"
-db_name = "kaoru"
-db_type = "mysql"
-db_port = "3306"
-
-db_connector = "{0}://{1}:{2}@{3}:{4}/{5}".format(
-    db_type,
-    db_user,
-    db_pass,
-    db_host,
-    db_port,
-    db_name
-)

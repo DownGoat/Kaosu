@@ -22,11 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+
 __author__ = 'Sindre Smistad'
 
 from flask import *
 from kaosu import ts3server
 from kaosu.models.client import Client
+from kaosu.database import db_session
+from kaosu.models.vote_kick import VoteKick
 
 
 mod = Blueprint('kick', __name__)
@@ -34,9 +37,23 @@ mod = Blueprint('kick', __name__)
 
 @mod.route("/kick", methods=["GET", "POST"])
 def get_kick():
+
     if request.method == "GET":
-        return render_template("kick.html")
+        clients = ts3server.get_clientsinfo(ts3server)
+
+        for client in clients:
+            votes = db_session.query(VoteKick).filter(VoteKick.clid == client.clid).count()
+            client.votes = votes
+
+        return render_template("kick.html", clients=clients)
     else:
-        clid = request.form.get("clid")
-        ts3server.kick_user(ts3server, int(clid))
+        clid = int(request.form.get("clid"))
+
+        votes = db_session.query(VoteKick).filter(VoteKick.clid == clid).count()
+        if votes == 4:
+            ts3server.kick_user(ts3server, clid, "Vote kick.")
+        else:
+            db_session.add(VoteKick(clid))
+            db_session.commit()
+
         return jsonify(clid=clid)

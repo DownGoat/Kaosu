@@ -52,15 +52,14 @@ $(document).ready(function () {
             $li.attr("cid", value.cid);
             $li.addClass("channel_li");
 
-            $($li).on("click", "li", function() {
-                console.log("asd");
-            });
-            /*
-            $li.delegate('li', 'click', function () {
+
+
+            $(document).on("click", "li.channel_li", function(e) {
                 $("#info_display").html(
-                    "<table><tr><td class='bold'>Name:</td><td>{0}</td></tr><tr><td class='bold'>Description:</td><td>{1}</td></tr></table>".format(value.channel_name, value.channel_description)
+                    "<h3>Channel Information</h3><table><tr><td class='bold'>Name:</td><td>{0}</td></tr><tr><td class='bold'>Description:</td><td>{1}</td></tr></table>".format(value.channel_name, value.channel_description)
                 );
-            });*/
+                e.stopPropagation();
+            });
 
             if (value.clients.length != 0) {
                 var $ul = $("<ul/>").appendTo($li);
@@ -70,16 +69,16 @@ $(document).ready(function () {
                     $foo.addClass("client_li");
                     $foo.attr("clid", client.clid);
 
-                    /*
-                    $foo.delegate('li', 'click', function () {
-                        console.log("asd");
+                    $(document).on("click", "li.client_li", function(e) {
+                        console.log("client click.");
                         $.get("/client/" + $foo.attr("clid")).done(function (data) {
-                            var cjson = jQuery.parseJSON(data);
+                            var cjson = data;
                             $("#info_display").html(
-                                "<table><tr><td class='bold'>Nickname:</td><td>{0}</td></tr><tr><td class='bold'>Description:</td><td>{1}</td></tr></table>".format(cjson.client_nickname, cjson.client_description)
+                                "<h3>Client Information</h3><table><tr><td class='bold'>Nickname:</td><td>{0}</td></tr><tr><td class='bold'>Description:</td><td>{1}</td></tr></table>".format(cjson.client_nickname, cjson.client_description)
                             );
                         });
-                    });*/
+                        e.stopPropagation();
+                    });
                 });
             }
         });

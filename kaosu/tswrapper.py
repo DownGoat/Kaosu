@@ -41,7 +41,7 @@ class TSWrapper(ts3.TS3Server):
 
     @staticmethod
     def get_client(ts3server, clid):
-        response = ts3server.send_command("clientinfo", keys={'clid': clid}).data[0]
+        response = ts3server.send_command("clientinfo", keys={"clid": clid}).data[0]
         response["clid"] = clid
         return Client(**response)
 
@@ -75,7 +75,7 @@ class TSWrapper(ts3.TS3Server):
 
     @staticmethod
     def get_channel(ts3server, cid):
-        response = ts3server.send_command("channelinfo", keys={'cid': cid}).data[0]
+        response = ts3server.send_command("channelinfo", keys={"cid": cid}).data[0]
         channel = Channel(**response)
         channel.cid = cid
 
@@ -105,5 +105,5 @@ class TSWrapper(ts3.TS3Server):
         return channels
 
     @staticmethod
-    def kick_user(ts3server, clid):
-       ts3server.send_command('clientkick', keys={'clid': clid, 'reasonid': 5})
+    def kick_user(ts3server, clid, reason):
+       ts3server.send_command('clientkick', keys={"clid": clid, "reasonid": 5, "reasonmsg": reason})
