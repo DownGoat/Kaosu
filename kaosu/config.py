@@ -34,29 +34,3 @@ version = "0.01"
 ts3admin_user = "serveradmin"
 ts3admin_pass = "password"
 
-
-config = {
-    # DB config
-    "db_user": "root",
-    "db_pass": "",
-    "db_host": "127.0.0.1",
-    "db_name": "perceive",
-    "db_type": "postgresql",
-    "db_port": "3306",
-
-    "version": version,
-
-    "log_app": "perceive",
-    "log_file": "preceive_{0}.log".format(date.today().isoformat()),
-    "log_level": logging.DEBUG,
-    #"log_level":    logging.INFO,
-}
-
-config["db_connector"] = "{0}://{1}:{2}@{3}:{4}/{5}".format(
-    config.get("db_type"),
-    config.get("db_user"),
-    config.get("db_pass"),
-    config.get("db_host"),
-    config.get("db_port"),
-    config.get("db_name")
-)
