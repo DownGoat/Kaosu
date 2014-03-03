@@ -1,4 +1,4 @@
-<!--
+"""
 The MIT License (MIT)
 
 Copyright (c) 2014 Sindre Knudsen Smistad
@@ -20,24 +20,24 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
--->
+"""
 
-{% extends "base.html" %}
-{% block head %}
-    <link rel="stylesheet" href="{{ url_for("static", filename="style/functions.css") }}" />
-{% endblock %}
-{% block title %}Functions{% endblock %}
-{% block content %}
+__author__ = 'Sindre Smistad'
 
-    <div id="sidebar">
-        <ul id="sidebar_ul">
-            <li class="sidebar_li"><a href="/functions">Server</a></li>
-            <li class="sidebar_li"><a href="/functions/kick">Vote kick</a></li>
-        </ul>
-    </div>
 
-    <div id="function_content">
-        {% block functions_content %}{% endblock %}
-    </div>
+import ts3
+from kaosu.config import *
+from kaosu.tswrapper import TSWrapper
 
-{% endblock %}
+
+def get_connection(ts3server):
+    ret_val = ts3server
+
+    try:
+        ts3server.check_connection()
+    except ts3.NoConnectionError:
+        ret_val = TSWrapper(ts3address, ts3port)
+        ret_val.login(ts3admin_user, ts3admin_pass)
+        ret_val.use(1)
+
+    return ret_val

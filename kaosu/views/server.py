@@ -36,6 +36,8 @@ mod = Blueprint('server', __name__)
 
 @mod.route("/server", methods=["GET"])
 def get_server():
+    ts3server.validate_connection()
+
     vserver = ts3server.get_serverinfo(ts3server)
     channels = ts3server.get_channelsinfo(ts3server)
     clients = ts3server.get_clientsinfo(ts3server)

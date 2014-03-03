@@ -33,6 +33,8 @@ version = "0.01"
 
 ts3admin_user = "serveradmin"
 ts3admin_pass = "password"
+ts3address = "127.0.0.1"
+ts3port = 10011
 
 db_user = "root"
 db_pass = "password"

@@ -26,9 +26,10 @@ __author__ = 'Sindre Smistad'
 
 
 from flask import *
-from kaosu import ts3server
+from kaosu import ts3server, testasd
 from kaosu.models.client import Client
 from kaosu.models.server import Server
+from kaosu.util import *
 
 
 mod = Blueprint('index', __name__)
@@ -36,6 +37,8 @@ mod = Blueprint('index', __name__)
 
 @mod.route("/", methods=["GET"])
 def index():
+    ts3server.validate_connection()
+
     vserver = ts3server.get_serverinfo(ts3server)
     channels = ts3server.get_channelsinfo(ts3server)
     clients = ts3server.get_clientsinfo(ts3server)

@@ -30,14 +30,26 @@ import re
 from kaosu.models.client import Client
 from kaosu.models.server import Server
 from kaosu.models.channel import Channel
+from kaosu.config import ts3address, ts3admin_pass, ts3admin_user, ts3port
 
 
 img_regex = "\[IMG\](.*?)\[\/IMG\]"
 
 
 class TSWrapper(ts3.TS3Server):
+    """
+    This is a wrapper for the TS3Server class
+    """
     def __init__(self, *args):
         ts3.TS3Server.__init__(self, *args)
+
+    def validate_connection(self):
+        try:
+            self.check_connection()
+        except ts3.NoConnectionError:
+            self.connect(ts3address, ts3port)
+            self.login(ts3admin_user, ts3admin_pass)
+            self.use(1)
 
     @staticmethod
     def get_client(ts3server, clid):

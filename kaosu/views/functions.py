@@ -37,12 +37,15 @@ mod = Blueprint('functions', __name__)
 
 @mod.route("/functions", methods=["GET", "POST"])
 def functions():
+    ts3server.validate_connection()
+
     server = ts3server.get_serverinfo(ts3server)
 
     return render_template("server.html", server=server)
 
 @mod.route("/functions/kick", methods=["GET", "POST"])
 def get_kick():
+    ts3server.validate_connection()
 
     if request.method == "GET":
         clients = ts3server.get_clientsinfo(ts3server)

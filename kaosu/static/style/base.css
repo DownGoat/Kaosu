@@ -22,30 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-ul#navbar_list {
+#navbar_list ul {
     list-style-type:none;
     margin:0;
     padding:0;
 }
 
-li.navbar_list_item {
+.navbar_list_item {
     display:inline;
     padding-right: 15px;
     padding-top: 20px;
 }
 
-li.navbar_list_item a {
+#navbar_list_item a {
     height: 30px;
 
 }
 
-li.navbar_list_item a:visited, a:link, a:active {
+#navbar_list_item a:visited, a:link, a:active {
     text-decoration:none;
     color: black;
     font-weight:bold;
 }
 
-li.navbar_list_item a:hover {
+#navbar_list_item a:hover {
     background-color: skyblue;
 }
 
@@ -55,3 +55,6 @@ li.navbar_list_item a:hover {
     padding-bottom: 5px;
     font-size: 16px;
 }
+
+
+

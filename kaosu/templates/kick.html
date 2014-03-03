@@ -26,17 +26,22 @@ THE SOFTWARE.
 {% block title %} - Vote Kick{% endblock %}
 {% block functions_content %}
 
-    <table>
+    <table id="kick_table">
+        <tr>
+            <th>Nickname</th>
+            <th>Action</th>
+            <th class="votes_td">Votes</th>
+        </tr>
     {% for client in clients %}
         <tr>
-            <td>{{ client.client_nickname }}</td>
+            <td class="client_td">{{ client.client_nickname }}</td>
             <td>
                 <form method="post" action="/functions/kick">
                     <input type="hidden" name="clid" value="{{ client.clid }}" />
                     <input type="submit" name="submit" value="Vote kick" />
                 </form>
             </td>
-            <td>Votes: {{ client.votes }}</td>
+            <td class="votes_td">{{ client.votes }}</td>
         </tr>
     {% endfor %}
     </table>

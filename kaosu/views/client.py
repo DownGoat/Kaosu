@@ -34,5 +34,6 @@ mod = Blueprint('client', __name__)
 
 @mod.route("/client/<int:clid>", methods=["GET"])
 def get_client(clid):
+    ts3server.validate_connection()
 
     return jsonify(Client.client_json(ts3server.get_client(ts3server, clid)))

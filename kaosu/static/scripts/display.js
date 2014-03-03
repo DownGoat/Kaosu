@@ -48,17 +48,15 @@ $(document).ready(function () {
 
         var $channels_container = $("#channels");
         $.each(json.channels, function (index, value) {
-            var $li = $("<li/>").html(value.channel_name).appendTo($channels_container).hide();
+            var $li = $("<li/>").html(value.channel_name).appendTo($channels_container);
             $li.attr("cid", value.cid);
             $li.addClass("channel_li");
 
-
-
             $(document).on("click", "li.channel_li", function(e) {
+                e.stopPropagation();
                 $("#info_display").html(
                     "<h3>Channel Information</h3><table><tr><td class='bold'>Name:</td><td>{0}</td></tr><tr><td class='bold'>Description:</td><td>{1}</td></tr></table>".format(value.channel_name, value.channel_description)
                 );
-                e.stopPropagation();
             });
 
             if (value.clients.length != 0) {
@@ -70,6 +68,7 @@ $(document).ready(function () {
                     $foo.attr("clid", client.clid);
 
                     $(document).on("click", "li.client_li", function(e) {
+                        e.stopPropagation();
                         console.log("client click.");
                         $.get("/client/" + $foo.attr("clid")).done(function (data) {
                             var cjson = data;
@@ -77,13 +76,10 @@ $(document).ready(function () {
                                 "<h3>Client Information</h3><table><tr><td class='bold'>Nickname:</td><td>{0}</td></tr><tr><td class='bold'>Description:</td><td>{1}</td></tr></table>".format(cjson.client_nickname, cjson.client_description)
                             );
                         });
-                        e.stopPropagation();
                     });
                 });
             }
         });
-
-        $("li", $channels_container).slideDown(1000);
     });
 });
 

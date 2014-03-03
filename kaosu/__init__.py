@@ -33,15 +33,17 @@ import ts3
 app = Flask(__name__)
 app.config.from_object('kaosu.config')
 
+# change this.
 app.secret_key = "secret"
 
 app.jinja_env.globals['static'] = (
     lambda filename: url_for('static', filename=filename))
 
-ts3server = TSWrapper('127.0.0.1', 10011)
+ts3server = TSWrapper(ts3address, ts3port)
 ts3server.login(ts3admin_user, ts3admin_pass)
 ts3server.use(1)
 
+testasd = "lol"
 
 from kaosu.views import client, index, server, functions
 
