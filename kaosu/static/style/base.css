@@ -36,6 +36,7 @@ li.navbar_list_item {
 
 li.navbar_list_item a {
     height: 30px;
+
 }
 
 li.navbar_list_item a:visited, a:link, a:active {
@@ -50,7 +51,7 @@ li.navbar_list_item a:hover {
 
 #navbar {
     display: table;
-
+    width: 100%;
     padding-bottom: 5px;
     font-size: 16px;
 }

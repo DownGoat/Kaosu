@@ -1,4 +1,4 @@
-"""
+<!--
 The MIT License (MIT)
 
 Copyright (c) 2014 Sindre Knudsen Smistad
@@ -20,40 +20,24 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-"""
+-->
 
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="style/functions.css") }}" />
+{% endblock %}
+{% block title %}Functions{% endblock %}
+{% block content %}
 
-__author__ = 'Sindre Smistad'
+    <div id="sidebar">
+        <ul id="sidebar_ul">
+            <li><a href="/functions">Server</a></li>
+            <li><a href="/functions/kick">Vote kick</a></li>
+        </ul>
+    </div>
 
-from flask import *
-from kaosu import ts3server
-from kaosu.models.client import Client
-from kaosu.database import db_session
-from kaosu.models.vote_kick import VoteKick
+    <div id="function_content">
+        {% block functions_content %}{% endblock %}
+    </div>
 
-
-mod = Blueprint('kick', __name__)
-
-
-@mod.route("/kick", methods=["GET", "POST"])
-def get_kick():
-
-    if request.method == "GET":
-        clients = ts3server.get_clientsinfo(ts3server)
-
-        for client in clients:
-            votes = db_session.query(VoteKick).filter(VoteKick.clid == client.clid).count()
-            client.votes = votes
-
-        return render_template("kick.html", clients=clients)
-    else:
-        clid = int(request.form.get("clid"))
-
-        votes = db_session.query(VoteKick).filter(VoteKick.clid == clid).count()
-        if votes == 4:
-            ts3server.kick_user(ts3server, clid, "Vote kick.")
-        else:
-            db_session.add(VoteKick(clid))
-            db_session.commit()
-
-        return jsonify(clid=clid)
+{% endblock %}

@@ -1,4 +1,4 @@
-<!--
+/*
 The MIT License (MIT)
 
 Copyright (c) 2014 Sindre Knudsen Smistad
@@ -20,25 +20,20 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
--->
+*/
 
-{% extends "functions_base.html" %}
-{% block title %} - Vote Kick{% endblock %}
-{% block functions_content %}
+#sidebar {
+    float: left;
+    border-right: 1px solid grey;
+    padding-right: 20px;
+    height: 500px;
+}
 
-    <table>
-    {% for client in clients %}
-        <tr>
-            <td>{{ client.client_nickname }}</td>
-            <td>
-                <form method="post" action="/functions/kick">
-                    <input type="hidden" name="clid" value="{{ client.clid }}" />
-                    <input type="submit" name="submit" value="Vote kick" />
-                </form>
-            </td>
-            <td>Votes: {{ client.votes }}</td>
-        </tr>
-    {% endfor %}
-    </table>
+#function_content {
+    float: left;
+    padding-left: 1em;
+}
 
-{% endblock %}
+#server_table {
+
+}

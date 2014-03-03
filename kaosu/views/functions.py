@@ -22,32 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+
 __author__ = 'Sindre Smistad'
 
 from flask import *
-from kaosu.config import *
-from kaosu.tswrapper import TSWrapper
-import ts3
+from kaosu import ts3server
+from kaosu.models.client import Client
+from kaosu.database import db_session
+from kaosu.models.vote_kick import VoteKick
 
 
-app = Flask(__name__)
-app.config.from_object('kaosu.config')
-
-app.secret_key = "secret"
-
-app.jinja_env.globals['static'] = (
-    lambda filename: url_for('static', filename=filename))
-
-ts3server = TSWrapper('127.0.0.1', 10011)
-ts3server.login(ts3admin_user, ts3admin_pass)
-ts3server.use(1)
+mod = Blueprint('functions', __name__)
 
 
-from kaosu.views import client, index, server, functions
+@mod.route("/functions", methods=["GET", "POST"])
+def functions():
+    server = ts3server.get_serverinfo(ts3server)
 
+    return render_template("server.html", server=server)
 
-#Register blueprints
-app.register_blueprint(client.mod)
-app.register_blueprint(index.mod)
-app.register_blueprint(server.mod)
-app.register_blueprint(functions.mod)
+@mod.route("/functions/kick", methods=["GET", "POST"])
+def get_kick():
+
+    if request.method == "GET":
+        clients = ts3server.get_clientsinfo(ts3server)
+
+        for client in clients:
+            votes = db_session.query(VoteKick).filter(VoteKick.clid == client.clid).count()
+            client.votes = votes
+
+        return render_template("kick.html", clients=clients)
+    else:
+        clid = int(request.form.get("clid"))
+
+        votes = db_session.query(VoteKick).filter(VoteKick.clid == clid).count()
+        if votes == 4:
+            ts3server.kick_user(ts3server, clid, "Vote kick.")
+        else:
+            db_session.add(VoteKick(clid))
+            db_session.commit()
+
+        return jsonify(clid=clid)

@@ -1,0 +1,77 @@
+<!--
+The MIT License (MIT)
+
+Copyright (c) 2014 Sindre Knudsen Smistad
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+{% extends "functions_base.html" %}
+{% block title %} - Vote Kick{% endblock %}
+{% block functions_content %}
+
+    <table id="server_table">
+        <tr>
+            <td class="bold">Server Name:</td>
+            <td id="server_name_t">{{ server.virtualserver_name }}</td>
+        </tr>
+
+        <tr>
+            <td class="bold">Status:</td>
+            <td id="status">{{ server.virtualserver_status }}</td>
+        </tr>
+
+        <tr>
+            <td class="bold">Max clients:</td>
+            <td id="max_clients">{{ server.virtualserver_maxclients }}</td>
+        </tr>
+
+        <tr>
+            <td class="bold">Online clients:</td>
+            <td id="online_clients">{{ server.virtualserver_clientsonline }}</td>
+        </tr>
+
+        <tr>
+            <td class="bold">Port:</td>
+            <td id="port">{{ server.virtualserver_port }}</td>
+        </tr>
+
+        <tr>
+            <td class="bold">Uptime:</td>
+            <td id="uptime">{{ server.virtualserver_uptime }}</td>
+        </tr>
+
+        <tr>
+            <td class="bold">Platform:</td>
+            <td id="platform">{{ server.virtualserver_platform }}</td>
+        </tr>
+
+        <tr>
+            <td class="bold">Welcome message:</td>
+            <td id="welcome_message">{{ server.virtualserver_welcomemessage }}</td>
+        </tr>
+    </table>
+
+    <form action="/functions" method="post">
+        <input type="submit" value="Start" />
+        <input type="submit" value="Restart" />
+        <input type="submit" value="Stop" />
+    </form>
+
+{% endblock %}
